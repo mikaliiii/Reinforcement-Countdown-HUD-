@@ -11,35 +11,14 @@
 
 ---
 
-## 一、先确认你的游戏构建
-
-**这一步不能跳过。** 模组只支持 Steam 构建 **25480438** / EXE `1.8.46015.0`。
-游戏一旦更新，读取器会**主动拒绝工作**（它不会拿已经不成立的偏移去读数），
-此时你只会看到日志里一行"不支持的游戏构建"，屏幕上什么都不显示。
-
-装模组之前先跑一次：
-
-```powershell
-python tools/check_build.py
-# 游戏不在默认位置时显式指定：
-python tools/check_build.py "D:\SteamLibrary\steamapps\common\Helldivers 2"
-```
-
-它会只读地核对 exe 与 game.dll 的 SHA-256、以及 game.dll 的 PE 指纹。
-全部匹配才继续往下装。
-
-> 为什么磁盘检查通过了还要进游戏确认一次：模组运行时校验的是**内存里**的
-> 8 条原生代码签名，而 game.dll 的代码段在磁盘上是压缩的，只有加载进内存
-> 才展开。所以磁盘上的字节和运行时比较的字节不是一回事。
-
-## 二、依赖
+## 一、依赖
 
 | 需要 | 说明 |
 | --- | --- |
 | **Bingus Shared Loader** | v15 或更新（API 1）。必须一起启用，只开本模组不起作用 |
 | 游戏构建 | Steam 25480438 / EXE 1.8.46015.0 |
 
-## 三、安装
+## 二、安装
 
 1. 关闭游戏
 2. 用 Arsenal（或 HD2 Mod Manager）导入
@@ -49,7 +28,7 @@ python tools/check_build.py "D:\SteamLibrary\steamapps\common\Helldivers 2"
 按 Arsenal 默认优先级，把 Bingus Shared Loader 放在列表最下面
 （如果你开了"优先第一个"，则放最上面）。
 
-## 四、显示规则
+## 三、显示规则
 
 面板固定在屏幕右侧偏上的位置，没有背景板，文字直接画在画面上。
 
@@ -80,7 +59,7 @@ python tools/check_build.py "D:\SteamLibrary\steamapps\common\Helldivers 2"
 # HUD layout: screen=2560x1334 scale=1.235 panel=212x49 at 2317,724
 ```
 
-## 五、日志与排查
+## 四、日志与排查
 
 ```
 %LOCALAPPDATA%\CowboyBingus\Helldivers2\Logs\ReinforcementRadar.log
@@ -104,13 +83,13 @@ SAMPLE  status=COOLDOWN  authoritative=true  seconds=171  raw_remaining=164.0148
 
 | 日志里出现 | 含义 | 怎么办 |
 | --- | --- | --- |
-| `不支持的游戏构建` | 游戏构建与模组不符 | 跑 `tools/check_build.py` 确认；等模组更新 |
+| `不支持的游戏构建` | 游戏构建与模组不符 | 运行`tools/check_build.py` 确认；等模组更新 |
 | `N/M 条守卫失败` | 游戏更新了，原生代码变了 | 需要重新适配（见下） |
 | 完全没有日志文件 | 加载器没发现这个 addon | 确认 loader 已启用且版本 ≥ v15；确认 Deploy 成功 |
 | `loader api=0` 或 `拒绝：加载器 API ... 过旧` | loader 太旧 | 升级 Bingus Shared Loader |
 | `reason=非权威端：仍在测量冷却速率` | 你刚进任务或刚换段 | 等约 4 秒即可出数字 |
 
-## 六、安全边界
+## 五、安全边界
 
 - **只读。** 源码里只声明四个 Windows API：`GetModuleHandleA`、
   `GetCurrentProcess`、`ReadProcessMemory`、`GetTickCount64`。没有写入、
@@ -125,15 +104,16 @@ SAMPLE  status=COOLDOWN  authoritative=true  seconds=171  raw_remaining=164.0148
 > 关于多人游戏：这是纯客户端读取，不修改任何游戏状态，因此不会与其他玩家
 > 不一致。但请自行了解你所在区域与平台对模组的态度。
 
-## 七、文档
+## 六、文档
 
-- [原理说明](docs/01-原理与偏移.md) —— 偏移表、状态机、坐标系的坑
-- [游戏更新后的维护](docs/02-游戏更新后的维护.md) —— 从定位签名到重新发布
-- [构建与测试](docs/03-构建与测试.md) —— 怎么自己重新构建、跑哪些测试
-- [开发记录](docs/04-开发记录.md) —— 走过哪些弯路、哪些结论是推断
-- [THIRD_PARTY.md](THIRD_PARTY.md) —— 与原项目的来源关系
+- [原理说明](docs/01-原理与偏移.md) 
+- [游戏更新后的维护](docs/02-游戏更新后的维护.md) 
+- [构建与测试](docs/03-构建与测试.md) 
+- [开发记录](docs/04-开发记录.md) 
+- [THIRD_PARTY.md](THIRD_PARTY.md)
+- **没有以上这些东西，开发都是找deepseekv4.1写的，测试就是拿d老师写出来的东西丢游戏里面然后开一把**，
 
-## 八、许可
+## 七、许可
 
 本移植版同样以 **MIT** 发布（见 [LICENSE](LICENSE)），并保留原项目的版权声明
 （见 [LICENSE-Reinforcement-Radar](LICENSE-Reinforcement-Radar)）。
