@@ -2,25 +2,11 @@
 
 在任务中把**敌人增援冷却**显示成屏幕上的倒计时：还能拉烟时显示 `READY`，
 冷却中显示 `MM:SS` 并按剩余时间变色。
-
 只读、不改游戏内存、不影响其他玩家。
-
-> ### ⚠ 上机前必读
->
-> 这份代码的**离线部分**已经全部验证过：用游戏同款 LuaJIT 真编译、状态机
-> 夹具 23 项全通过、归档回读一致、接线检查 20 项全通过。
->
-> 但它**还没有在本机进游戏跑过**（开发机上没找到游戏安装目录）。所以：
->
-> 1. 先跑 `python tools/check_build.py` 确认本机构建受支持
-> 2. 装好后进一次游戏，看日志里是否出现 `构建校验通过：9/9 条守卫`
-> 3. 进任务后看是否出现 `status=COOLDOWN` 的 SAMPLE 块
->
-> 不通过时把日志贴给我，日志的设计目的就是"一份就能定位故障"。
 
 > 本模组是 [Reinforcement Radar](https://github.com/superSizzzz/Reinforcement-Radar)（MIT，
 > superSizzzz）的衍生作品。偏移、签名与状态机来自原项目的实测结果；
-> 本项目把实现改为**单资源明文**、补齐离线测试与中文文档。详见
+> 本项目把实现改为单资源明文、补齐离线测试与中文文档。详见
 > [THIRD_PARTY.md](THIRD_PARTY.md)。
 
 ---
@@ -50,34 +36,32 @@ python tools/check_build.py "D:\SteamLibrary\steamapps\common\Helldivers 2"
 
 | 需要 | 说明 |
 | --- | --- |
-| **Bingus Shared Loader** | v15 或更新（API 1）。**必须一起启用**，只开本模组不起作用 |
+| **Bingus Shared Loader** | v15 或更新（API 1）。必须一起启用，只开本模组不起作用 |
 | 游戏构建 | Steam 25480438 / EXE 1.8.46015.0 |
 
 ## 三、安装
 
 1. 关闭游戏
-2. 用 **Arsenal**（或 HD2 Mod Manager）导入
+2. 用 Arsenal（或 HD2 Mod Manager）导入
    `build/Reinforcement-Countdown-HUD-1.0.0.zip`
-3. 启用本模组，**同时启用 Bingus Shared Loader**
-4. 点 Purge / Deploy
-5. 启动游戏，进一局任务
+3. 启用本模组，同时启用 Bingus Shared Loader
 
-Loader 的推荐顺序：按 Arsenal 默认优先级，把 Bingus Shared Loader 放在**列表最下面**
+按 Arsenal 默认优先级，把 Bingus Shared Loader 放在列表最下面
 （如果你开了"优先第一个"，则放最上面）。
 
 ## 四、显示规则
 
 面板固定在屏幕右侧偏上的位置，没有背景板，文字直接画在画面上。
 
-| 状态 | 显示 | 颜色 |
-| --- | --- | --- |
-| 可以拉烟（冷却清零） | `READY` | 绿 |
-| 冷却中，剩余 > 2 分钟 | `MM:SS` | 绿 |
-| 冷却中，剩余 1–2 分钟 | `MM:SS` | 橙 |
-| 冷却中，剩余 < 1 分钟 | `MM:SS` | 红 |
-| 增援进行中（冷却被冻结） | **不显示** | — |
-| 不在任务中 | **不显示** | — |
-| 客机（前约 4 秒） | **不显示** | — |
+状态 | 显示 | 颜色 
+--- | --- | --- 
+可以拉烟（冷却清零） | `READY` | 绿 
+冷却中，剩余 > 2 分钟 | `MM:SS` | 绿 
+冷却中，剩余 1–2 分钟 | `MM:SS` | 橙 
+冷却中，剩余 < 1 分钟 | `MM:SS` | 红 
+增援进行中（冷却被冻结） | **不显示** | — 
+不在任务中 | **不显示** | — |
+客机（前约 4 秒） | **不显示** | — 
 
 三条"不显示"都是刻意的，不是缺陷：
 
